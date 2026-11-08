@@ -127,3 +127,9 @@ button { cursor: pointer; }
 .backup-actions button:hover { color: #5369bd; background: white; }
 .notice-toast { position: fixed; right: 18px; bottom: 18px; display: flex; align-items: center; gap: 10px; padding: 10px 13px; color: #fff; background: #41434d; border: 0; border-radius: 8px; box-shadow: 0 5px 18px #0002; font-size: 11px; }
 @media (max-width: 950px) { .backup-actions { bottom: 50px; right: 10px; } }
+
+/* Productivity shortcuts and window pin */
+.pin-active { color: #6579c6 !important; background: #edf0fb !important; }
+.sidebar-actions button:disabled { opacity: .3; cursor: not-allowed; }
+.search-box:focus-within { border-color: #aab5df; background: #fff; box-shadow: 0 0 0 2px #6478c51a; }
+button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 2px solid #91a0d8; outline-offset: 2px; }
