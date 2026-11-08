@@ -3,7 +3,7 @@ import { loadWebState, saveWebState } from "./services/webStorage";
 import {
   ArrowDown, ArrowUp, Check, ChevronDown, FileText, Menu, Plus, Search, Settings2,
   Trash2, ListTodo, X, Star, RotateCcw, Download, Upload, Heart, Pin,
-  MoreHorizontal
+  MoreHorizontal, ExternalLink
 } from "lucide-react";
 
 type Todo = { id: string; text: string; completed: boolean };
@@ -330,6 +330,7 @@ export default function App() {
       <header className="titlebar">
         <div className="traffic-lights"><i /><i /><i /></div>
         <div className="titlebar-title">Memo Tab</div>
+        {!window.memoTab && <button className="web-widget-launch" onClick={() => window.open("./widget.html", "memo-tab-mini", "popup,width=390,height=700,resizable=yes")}><ExternalLink size={13} /> 미니 위젯</button>}
         <button className="icon-button titlebar-menu" onClick={() => setSidebarOpen(!sidebarOpen)} aria-label="사이드바 전환"><Menu size={17} /></button>
       </header>
       <div className="workspace">
