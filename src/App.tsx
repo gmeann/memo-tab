@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import {
   Archive, Check, ChevronDown, FileText, Menu, MoreHorizontal,
-  Plus, Search, Settings2, Star, Trash2, ListTodo, X
+  Plus, Search, Settings2, Trash2, ListTodo, X
 } from "lucide-react";
 
 type Todo = { id: string; text: string; completed: boolean };
