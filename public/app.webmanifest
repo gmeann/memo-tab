@@ -1,0 +1,15 @@
+{
+  "id": "./index.html",
+  "name": "Memo Tab",
+  "short_name": "Memo Tab",
+  "description": "선생님을 위한 탭형 메모와 체크리스트",
+  "lang": "ko-KR",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f5f5f7",
+  "theme_color": "#f5f5f7",
+  "icons": [
+    { "src": "./memo-tab-icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
