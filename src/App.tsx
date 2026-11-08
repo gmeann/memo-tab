@@ -352,7 +352,7 @@ export default function App() {
           </div>
           <div className="sidebar-bottom">
             <div className="storage-status"><span className={`status-dot ${saveStatus === "저장됨" ? "online" : ""}`} /> {saveStatus}</div>
-            <div className="version-label">MEMO TAB · 0.3.0</div>
+            <div className="version-label">MEMO TAB · 0.4.0</div>
           </div>
         </aside>}
 
