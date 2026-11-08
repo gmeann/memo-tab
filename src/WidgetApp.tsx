@@ -50,7 +50,6 @@ export default function WidgetApp() {
     })) }));
   };
   const createNote = () => {
-    const tab = state.tabs[0] ?? initialState.tabs[0];
     const note: Note = { id: makeId(), title: "", body: "", updatedAt: new Date().toISOString(), todos: [] };
     setState((current) => ({ tabs: current.tabs.map((item, index) => index === 0 ? { ...item, notes: [note, ...item.notes] } : item) }));
     setActiveId(note.id);
