@@ -133,3 +133,6 @@ button { cursor: pointer; }
 .sidebar-actions button:disabled { opacity: .3; cursor: not-allowed; }
 .search-box:focus-within { border-color: #aab5df; background: #fff; box-shadow: 0 0 0 2px #6478c51a; }
 button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 2px solid #91a0d8; outline-offset: 2px; }
+
+.web-widget-launch { position: absolute; right: 54px; display: inline-flex; align-items: center; gap: 5px; height: 27px; padding: 0 9px; color: #777983; background: #e9eaf0; border: 0; border-radius: 6px; font-size: 10px; -webkit-app-region: no-drag; }
+.web-widget-launch:hover { color: #5369bd; background: #e1e4f1; }
