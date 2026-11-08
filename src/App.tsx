@@ -1,4 +1,5 @@
 import { ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
+import { loadWebState, saveWebState } from "./services/webStorage";
 import {
   ArrowDown, ArrowUp, Check, ChevronDown, FileText, Menu, Plus, Search, Settings2,
   Trash2, ListTodo, X, Star, RotateCcw, Download, Upload, Heart, Pin,
@@ -75,13 +76,10 @@ export default function App() {
   useEffect(() => {
     let mounted = true;
     async function load() {
-      if (!window.memoTab) {
-        setSaveStatus("데스크톱 앱에서 실행해 주세요");
-        setLoading(false);
-        return;
-      }
       try {
-        const state = await window.memoTab.loadState();
+        const state = window.memoTab
+          ? await window.memoTab.loadState()
+          : await loadWebState<AppState>(fallbackState);
         if (!mounted) return;
         const loadedTabs = isValidState(state) ? state.tabs : fallbackState.tabs;
         setTabs(loadedTabs);
@@ -100,11 +98,12 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    if (loading || !window.memoTab) return;
+    if (loading) return;
     setSaveStatus("저장 중");
     const timeout = window.setTimeout(async () => {
       try {
-        await window.memoTab?.saveState({ tabs });
+        if (window.memoTab) await window.memoTab.saveState({ tabs });
+        else await saveWebState({ tabs });
         setSaveStatus("저장됨");
       } catch (error) {
         console.error("Failed to save Memo Tab data", error);
