@@ -1,7 +1,7 @@
 import { ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
 import {
-  Archive, Check, ChevronDown, FileText, Menu, Plus, Search, Settings2,
-  Trash2, ListTodo, X, Star, RotateCcw, Download, Upload, Inbox, Heart,
+  Check, ChevronDown, FileText, Menu, Plus, Search, Settings2,
+  Trash2, ListTodo, X, Star, RotateCcw, Download, Upload, Heart,
   MoreHorizontal
 } from "lucide-react";
 
@@ -112,7 +112,6 @@ export default function App() {
   }, [tabs, loading]);
 
   const activeTab = tabs.find((tab) => tab.id === activeTabId) ?? tabs[0];
-  const activeNote = activeTab?.notes.find((note) => note.id === activeNoteId);
   const allNotes = useMemo<ListedNote[]>(() =>
     tabs.flatMap((tab) => tab.notes.map((note) => ({ note, tab }))),
   [tabs]);
