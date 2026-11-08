@@ -1,0 +1,38 @@
+* { box-sizing: border-box; }
+html, body, #root { margin: 0; min-width: 280px; min-height: 100%; }
+body { font-family: "DM Sans", "Noto Sans KR", -apple-system, BlinkMacSystemFont, sans-serif; background: #f5f5f7; color: #30313a; }
+button, input, textarea { font: inherit; }
+.widget-shell { min-height: 100vh; display: flex; flex-direction: column; background: #fbfbfc; }
+.widget-header { height: 58px; flex: 0 0 58px; display: flex; align-items: center; justify-content: space-between; padding: 0 15px; background: #f1f1f4; border-bottom: 1px solid #e8e8ed; }
+.widget-brand { display: flex; align-items: center; gap: 9px; }
+.widget-logo { width: 29px; height: 29px; display: grid; place-items: center; color: white; background: #7184cc; border-radius: 9px; }
+.widget-brand strong { display: block; font-size: 12px; }
+.widget-brand small { display: block; margin-top: 2px; color: #999ba4; font-size: 9px; }
+.widget-header-actions { display: flex; gap: 5px; }
+.widget-header-actions a, .widget-header-actions button { width: 29px; height: 29px; display: grid; place-items: center; color: #777b89; background: transparent; border: 0; border-radius: 7px; text-decoration: none; }
+.widget-header-actions a:hover, .widget-header-actions button:hover { background: #e4e6ee; }
+.widget-content { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.widget-note-picker { max-height: 142px; overflow: auto; padding: 8px 10px; border-bottom: 1px solid #ededf0; }
+.widget-note-picker button { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 7px 8px; color: #676a75; background: transparent; border: 0; border-radius: 6px; text-align: left; font-size: 10px; }
+.widget-note-picker button span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.widget-note-picker button small { flex: 0 0 auto; color: #a5a7b0; font-size: 9px; }
+.widget-note-picker button.active, .widget-note-picker button:hover { color: #424654; background: #eef0f8; }
+.widget-empty { padding: 8px; color: #999ba4; font-size: 10px; }
+.widget-editor { flex: 1; min-height: 190px; display: flex; flex-direction: column; padding: 16px 16px 10px; }
+.widget-editor > input { width: 100%; padding: 4px 0 9px; color: #30313a; background: transparent; border: 0; border-bottom: 1px solid #ededf0; outline: 0; font-size: 14px; font-weight: 700; }
+.widget-editor > textarea { flex: 1; min-height: 120px; margin-top: 10px; padding: 0; resize: vertical; color: #5d606b; background: transparent; border: 0; outline: 0; font-size: 11px; line-height: 1.8; }
+.widget-editor input:focus, .widget-editor textarea:focus { outline: 2px solid #aab5df55; outline-offset: 2px; }
+.widget-todos { margin-top: 12px; padding-top: 10px; border-top: 1px solid #ededf0; }
+.widget-todo-title { margin-bottom: 6px; color: #7f8290; font-size: 10px; font-weight: 700; }
+.widget-todos label { display: flex; align-items: center; gap: 7px; padding: 4px 0; color: #626571; font-size: 10px; }
+.widget-todos label span { flex: 1; }
+.widget-todos label.done span { color: #aeb0b8; text-decoration: line-through; }
+.widget-todos label > input { accent-color: #7184cc; }
+.widget-todos label > button { display: grid; place-items: center; width: 20px; height: 20px; color: #a3a5ad; background: transparent; border: 0; }
+.widget-todos form { display: flex; gap: 5px; margin-top: 7px; }
+.widget-todos form input { flex: 1; min-width: 0; height: 28px; padding: 0 8px; background: #f3f3f6; border: 1px solid #e9e9ed; border-radius: 6px; outline: 0; font-size: 10px; }
+.widget-todos form button { width: 28px; display: grid; place-items: center; color: white; background: #7184cc; border: 0; border-radius: 6px; }
+.widget-todos form button:disabled { opacity: .4; }
+.widget-footer { min-height: 37px; display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 0 13px; color: #a4a6ae; background: #f8f8fa; border-top: 1px solid #ededf0; font-size: 9px; }
+.widget-footer a { display: inline-flex; align-items: center; gap: 4px; color: #7184cc; text-decoration: none; }
+.widget-loading { padding: 24px; color: #999ba4; text-align: center; font-size: 11px; }
