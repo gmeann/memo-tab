@@ -20,7 +20,9 @@ function persistDatabase() {
 
 async function initializeDatabase() {
   const SQL = await initSqlJs({
-    locateFile: (file) => app.isPackaged\n      ? path.join(process.resourcesPath, "app.asar.unpacked", "node_modules", "sql.js", "dist", file)\n      : path.join(app.getAppPath(), "node_modules", "sql.js", "dist", file)
+    locateFile: (file) => app.isPackaged
+      ? path.join(process.resourcesPath, "app.asar.unpacked", "node_modules", "sql.js", "dist", file)
+      : path.join(app.getAppPath(), "node_modules", "sql.js", "dist", file)
   });
 
   databasePath = path.join(app.getPath("userData"), "memo-tab.sqlite");
