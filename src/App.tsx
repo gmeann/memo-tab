@@ -1,7 +1,7 @@
 import { ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
 import {
-  Check, ChevronDown, FileText, Menu, Plus, Search, Settings2,
-  Trash2, ListTodo, X, Star, RotateCcw, Download, Upload, Heart,
+  ArrowDown, ArrowUp, Check, ChevronDown, FileText, Menu, Plus, Search, Settings2,
+  Trash2, ListTodo, X, Star, RotateCcw, Download, Upload, Heart, Pin,
   MoreHorizontal
 } from "lucide-react";
 
@@ -31,6 +31,7 @@ declare global {
       loadState: () => Promise<AppState>;
       saveState: (state: AppState) => Promise<{ success: boolean }>;
       getStoragePath: () => Promise<string>;
+      setAlwaysOnTop: (enabled: boolean) => Promise<boolean>;
     };
   }
 }
@@ -67,7 +68,9 @@ export default function App() {
   const [todoInput, setTodoInput] = useState("");
   const [view, setView] = useState<View>("notes");
   const [notice, setNotice] = useState("");
+  const [alwaysOnTop, setAlwaysOnTop] = useState(false);
   const importRef = useRef<HTMLInputElement>(null);
+  const searchRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     let mounted = true;
@@ -112,6 +115,7 @@ export default function App() {
   }, [tabs, loading]);
 
   const activeTab = tabs.find((tab) => tab.id === activeTabId) ?? tabs[0];
+  const activeNote = activeTab?.notes.find((note) => note.id === activeNoteId);
   const allNotes = useMemo<ListedNote[]>(() =>
     tabs.flatMap((tab) => tab.notes.map((note) => ({ note, tab }))),
   [tabs]);
@@ -128,6 +132,46 @@ export default function App() {
       return inView && matches;
     }).sort((a, b) => b.note.updatedAt.localeCompare(a.note.updatedAt));
   }, [allNotes, query, view]);
+
+  useEffect(() => {
+    function handleShortcut(event: KeyboardEvent) {
+      const modifier = event.ctrlKey || event.metaKey;
+      if (!modifier) return;
+      if (event.key.toLowerCase() === "k") {
+        event.preventDefault();
+        searchRef.current?.focus();
+        searchRef.current?.select();
+      }
+      if (event.key.toLowerCase() === "n") {
+        event.preventDefault();
+        addNote();
+      }
+    }
+    window.addEventListener("keydown", handleShortcut);
+    return () => window.removeEventListener("keydown", handleShortcut);
+  }, [activeTabId, tabs, view]);
+
+  async function toggleAlwaysOnTop() {
+    if (!window.memoTab) return;
+    try {
+      const next = await window.memoTab.setAlwaysOnTop(!alwaysOnTop);
+      setAlwaysOnTop(next);
+      setNotice(next ? "창을 항상 위에 표시해요." : "항상 위 표시를 해제했어요.");
+    } catch {
+      setNotice("창 설정을 변경하지 못했어요.");
+    }
+  }
+
+  function moveTab(direction: -1 | 1) {
+    const index = tabs.findIndex((tab) => tab.id === activeTabId);
+    const target = index + direction;
+    if (index < 0 || target < 0 || target >= tabs.length) return;
+    setTabs((current) => {
+      const reordered = [...current];
+      [reordered[index], reordered[target]] = [reordered[target], reordered[index]];
+      return reordered;
+    });
+  }
 
   function updateTab(tabId: string, updater: (tab: NoteTab) => NoteTab) {
     setTabs((current) => current.map((tab) => tab.id === tabId ? updater(tab) : tab));
@@ -301,6 +345,8 @@ export default function App() {
           <div className="sidebar-actions">
             <button onClick={() => { setView("favorites"); setQuery(""); }} className={view === "favorites" ? "selected-action" : ""}><Heart size={13} /> 즐겨찾기 <span>{allNotes.filter(({ note }) => note.isFavorite && !note.deletedAt).length || ""}</span></button>
             <button onClick={() => { setView("trash"); setQuery(""); }} className={view === "trash" ? "selected-action" : ""}><Trash2 size={13} /> 휴지통 <span>{allNotes.filter(({ note }) => note.deletedAt).length || ""}</span></button>
+            <button onClick={() => moveTab(-1)} disabled={tabs.findIndex((tab) => tab.id === activeTabId) <= 0}><ArrowUp size={13} /> 탭 순서 위로</button>
+            <button onClick={() => moveTab(1)} disabled={tabs.findIndex((tab) => tab.id === activeTabId) === tabs.length - 1}><ArrowDown size={13} /> 탭 순서 아래로</button>
             <button onClick={renameTab}><Settings2 size={13} /> 현재 탭 이름 변경</button>
             <button onClick={deleteTab} disabled={tabs.length <= 1}><X size={13} /> 현재 탭 삭제</button>
           </div>
@@ -316,7 +362,7 @@ export default function App() {
             {view === "notes" ? <button className="primary-button" onClick={addNote}><Plus size={16} /> 새 메모</button>
               : view === "trash" ? <button className="subtle-button" onClick={emptyTrash} disabled={!visibleNotes.length}>휴지통 비우기</button> : null}
           </div>
-          <div className="search-box"><Search size={15} /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="모든 탭에서 메모 검색" /><kbd>⌘ K</kbd></div>
+          <div className="search-box"><Search size={15} /><input ref={searchRef} value={query} onChange={(event) => setQuery(event.target.value)} placeholder="모든 탭에서 메모 검색" /><kbd>Ctrl K</kbd></div>
           <div className="note-list">
             {visibleNotes.map((item) => <button key={item.note.id} className={`note-card ${activeNoteId === item.note.id ? "selected" : ""}`} onClick={() => selectListedNote(item)}>
               <div className="note-card-top"><FileText size={14} /><span>{item.tab.name}</span><span className="note-date">{formatDate(item.note.updatedAt)}</span>{item.note.isFavorite && !item.note.deletedAt && <Star size={12} className="favorite-mark" fill="currentColor" />}</div>
@@ -334,6 +380,7 @@ export default function App() {
               <div className="breadcrumb">{selectedTab.name}<ChevronDown size={13} /><span>{isTrashView ? "휴지통" : "메모"}</span></div>
               <div className="toolbar-actions">
                 <span className="saved-label"><Check size={13} /> {saveStatus}</span>
+                {!isTrashView && <button className={`icon-button ${alwaysOnTop ? "pin-active" : ""}`} aria-label="항상 위에 표시" title="항상 위에 표시" onClick={toggleAlwaysOnTop}><Pin size={16} /></button>}
                 {isTrashView ? <>
                   <button className="icon-button" aria-label="복원" title="복원" onClick={() => restoreNote(selectedTab.id, selectedNote.id)}><RotateCcw size={16} /></button>
                   <button className="icon-button danger-icon" aria-label="영구 삭제" title="영구 삭제" onClick={() => permanentlyDelete(selectedTab.id, selectedNote.id)}><Trash2 size={16} /></button>
