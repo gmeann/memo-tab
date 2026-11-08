@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain } from "electron";
+import { app, BrowserWindow, globalShortcut, ipcMain } from "electron";
 import initSqlJs, { Database } from "sql.js";
 import fs from "node:fs";
 import path from "node:path";
@@ -101,6 +101,12 @@ function registerIpcHandlers() {
     return { success: true };
   });
   ipcMain.handle("memo-tab:get-storage-path", () => databasePath);
+  ipcMain.handle("memo-tab:set-always-on-top", (_event, enabled: boolean) => {
+    const window = BrowserWindow.getFocusedWindow() ?? BrowserWindow.getAllWindows()[0];
+    if (!window) return false;
+    window.setAlwaysOnTop(Boolean(enabled));
+    return window.isAlwaysOnTop();
+  });
 }
 
 function createWindow() {
@@ -132,11 +138,23 @@ app.whenReady().then(async () => {
   await initializeDatabase();
   registerIpcHandlers();
   createWindow();
+  globalShortcut.register("CommandOrControl+Shift+M", () => {
+    const window = BrowserWindow.getAllWindows()[0];
+    if (!window) return;
+    if (window.isVisible()) {
+      window.hide();
+    } else {
+      window.show();
+      window.focus();
+    }
+  });
 
   app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });
 });
+
+app.on("will-quit", () => globalShortcut.unregisterAll());
 
 app.on("before-quit", () => {
   persistDatabase();
