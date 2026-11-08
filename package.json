@@ -1,6 +1,6 @@
 {
   "name": "memo-tab",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "description": "A clean tabbed notes app for teachers",
   "main": "electron-dist/main.js",
@@ -36,9 +36,17 @@
   "build": {
     "appId": "kr.memo-tab.desktop",
     "productName": "Memo Tab",
-    "directories": { "output": "release" },
-    "files": ["dist/**/*", "electron-dist/**/*", "package.json"],
-    "win": { "target": "nsis" },
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "electron-dist/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": "nsis"
+    },
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
