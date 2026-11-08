@@ -2,12 +2,8 @@
 
 :root {
   font-family: "DM Sans", "Noto Sans KR", -apple-system, BlinkMacSystemFont, sans-serif;
-  color: #24252a;
-  background: #f5f5f7;
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  font-optical-sizing: auto;
+  color: #24252a; background: #f5f5f7; font-synthesis: none; text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased; font-optical-sizing: auto;
 }
 * { box-sizing: border-box; }
 body { margin: 0; min-width: 760px; min-height: 560px; }
@@ -36,9 +32,14 @@ button { cursor: pointer; }
 .tab-nav-item:nth-child(3) .tab-dot { background: #82b8a1; }
 .tab-nav-item:nth-child(4) .tab-dot { background: #c69bc9; }
 .tab-count { margin-left: auto; color: #a1a2a8; font-size: 10px; }
+.sidebar-actions { display: flex; flex-direction: column; gap: 2px; margin-top: 14px; padding: 10px 4px; border-top: 1px solid #e4e4e7; }
+.sidebar-actions button { display: flex; align-items: center; gap: 8px; padding: 7px 6px; color: #898b93; background: transparent; border: 0; border-radius: 5px; text-align: left; font-size: 10px; }
+.sidebar-actions button:hover { background: #e8e8eb; color: #555761; }
+.sidebar-actions button:disabled { opacity: .35; cursor: not-allowed; }
 .sidebar-bottom { margin-top: auto; padding: 12px 8px 2px; }
 .storage-status { display: flex; align-items: center; gap: 7px; color: #8a8b92; font-size: 10px; }
 .status-dot { width: 6px; height: 6px; border-radius: 50%; background: #d9a85f; }
+.status-dot.online { background: #65b58a; }
 .version-label { margin-top: 13px; color: #b1b1b7; font-size: 9px; letter-spacing: .1em; }
 .note-panel { width: 278px; flex: 0 0 278px; display: flex; flex-direction: column; background: #fafafc; border-right: 1px solid #e9e9ec; min-height: 0; }
 .panel-heading { padding: 27px 19px 17px; display: flex; justify-content: space-between; align-items: end; }
@@ -70,16 +71,41 @@ button { cursor: pointer; }
 .icon-button:hover { color: #555761; background: #e8e8ec; }
 .icon-button.small { width: 25px; height: 25px; }
 .icon-button.tiny { width: 20px; height: 20px; }
-.editor { width: min(100%, 760px); flex: 1; margin: 0 auto; padding: 54px 62px 30px; display: flex; flex-direction: column; min-height: 0; }
+.editor { width: min(100%, 760px); flex: 1; margin: 0 auto; padding: 54px 62px 30px; display: flex; flex-direction: column; min-height: 0; overflow: auto; }
 .title-input { width: 100%; padding: 0; color: #292a30; background: transparent; border: 0; outline: 0; font-size: 25px; font-weight: 700; letter-spacing: -.055em; }
 .title-input::placeholder { color: #c5c5ca; }
 .editor-meta { margin-top: 11px; color: #b1b2b8; font-size: 9px; }
-.body-input { flex: 1; width: 100%; min-height: 200px; margin-top: 34px; padding: 0; resize: none; color: #555760; background: transparent; border: 0; outline: 0; font-size: 12px; line-height: 2; white-space: pre-wrap; }
+.body-input { flex: 1; width: 100%; min-height: 180px; margin-top: 34px; padding: 0; resize: vertical; color: #555760; background: transparent; border: 0; outline: 0; font-size: 12px; line-height: 2; white-space: pre-wrap; }
 .body-input::placeholder { color: #c4c5ca; }
-.todo-hint { display: flex; align-items: center; gap: 7px; padding: 10px 12px; color: #7a8c80; background: #f1f7f2; border-radius: 7px; font-size: 10px; }
+.todo-section { margin-top: 24px; padding-top: 17px; border-top: 1px solid #f0f0f2; }
+.todo-section-heading { display: flex; align-items: center; justify-content: space-between; color: #62646d; }
+.todo-section-heading > div { display: flex; align-items: center; gap: 7px; }
+.todo-section-heading strong { font-size: 11px; font-weight: 600; }
+.toggle-control { display: inline-flex; align-items: center; gap: 7px; color: #9698a0; font-size: 9px; cursor: pointer; }
+.toggle-control input { position: absolute; opacity: 0; pointer-events: none; }
+.toggle-track { width: 27px; height: 16px; position: relative; border-radius: 10px; background: #d8d9de; transition: background .15s; }
+.toggle-track::after { content: ""; position: absolute; top: 2px; left: 2px; width: 12px; height: 12px; border-radius: 50%; background: white; box-shadow: 0 1px 2px #0002; transition: transform .15s; }
+.toggle-control input:checked + .toggle-track { background: #7184cc; }
+.toggle-control input:checked + .toggle-track::after { transform: translateX(11px); }
+.todo-form { display: flex; gap: 7px; margin-top: 13px; }
+.todo-form input { flex: 1; min-width: 0; height: 32px; padding: 0 10px; color: #555760; background: #f7f7f9; border: 1px solid #ededf0; border-radius: 6px; outline: none; font-size: 10px; }
+.todo-form input:focus { border-color: #aab5df; }
+.todo-form button { width: 32px; display: grid; place-items: center; color: white; background: #7184cc; border: 0; border-radius: 6px; }
+.todo-form button:disabled { opacity: .4; cursor: not-allowed; }
+.todo-items { display: flex; flex-direction: column; gap: 2px; margin-top: 9px; }
+.todo-item { min-height: 31px; display: flex; align-items: center; gap: 8px; padding: 4px 5px; border-radius: 5px; }
+.todo-item:hover { background: #f8f8fa; }
+.todo-item > input { width: 13px; height: 13px; accent-color: #7184cc; }
+.todo-item > span { flex: 1; color: #62646d; font-size: 10px; }
+.todo-item.completed > span { color: #b0b1b7; text-decoration: line-through; }
+.todo-item > button { width: 22px; height: 22px; display: grid; place-items: center; color: #b0b1b7; background: transparent; border: 0; border-radius: 4px; }
+.todo-item > button:hover { color: #d06e6e; background: #f8eeee; }
+.todo-empty { margin: 12px 0 6px; color: #b0b1b7; font-size: 10px; }
+.todo-progress { margin-top: 7px; color: #a4a5ab; text-align: right; font-size: 9px; }
 .editor-footer { height: 43px; flex: 0 0 43px; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; color: #b4b5bb; border-top: 1px solid #f0f0f2; font-size: 9px; }
 .editor-empty { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #a2a3aa; }
 .empty-icon { width: 52px; height: 52px; display: grid; place-items: center; margin-bottom: 13px; color: #8d9bd0; background: #f0f2fa; border-radius: 15px; }
 .editor-empty h2 { margin: 0 0 7px; color: #4b4d55; font-size: 15px; }
 .editor-empty p { margin: 0 0 18px; font-size: 11px; }
+.loading-screen { height: 100vh; display: flex; align-items: center; justify-content: center; gap: 12px; color: #8b8d95; background: #f7f7f8; font-size: 12px; }
 @media (max-width: 950px) { .sidebar { width: 180px; flex-basis: 180px; } .note-panel { width: 245px; flex-basis: 245px; } .editor { padding: 42px 35px 24px; } }
