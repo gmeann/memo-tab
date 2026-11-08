@@ -51,6 +51,9 @@
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true
-    }
+    },
+    "asarUnpack": [
+      "node_modules/sql.js/dist/**"
+    ]
   }
 }
